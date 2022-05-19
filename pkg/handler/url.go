@@ -8,21 +8,21 @@ import (
 	"net/http"
 )
 
-func (h *Handler) GetLongUrl(c echo.Context) error {
-	req := new(getLongUrlRequest)
+func (h *Handler) GetOrgUrl(c echo.Context) error {
+	req := new(getOrgUrlRequest)
 	if err := c.Bind(req); err != nil {
 		return err
 	}
-	u, err := h.urlStore.GetByShortUrl(req.ShortUrl)
+	u, err := h.urlStore.GetByShortUrlPath(req.ShortUrlPath)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.NewError(err))
 	}
-	res := new(getLongUrlResponse)
+	res := new(getOrgUrlResponse)
 
-	if u.LongUrl == "" {
+	if u.OrgUrl == "" {
 		return c.JSON(http.StatusNotFound, utils.NotFound())
 	}
-	res.LongUrl = u.LongUrl
+	res.OrgUrl = u.OrgUrl
 
 	return c.JSON(http.StatusOK, res)
 }
@@ -34,24 +34,24 @@ func (h *Handler) ShortenUrl(c echo.Context) error {
 	}
 	res := new(shortenUrlResponse)
 
-	if u, _ := h.urlStore.GetByLongUrl(req.LongUrl); u != nil {
-		res.ShortUrl = u.ShortUrl
+	if u, _ := h.urlStore.GetByOrgUrl(req.OrgUrl); u != nil {
+		res.ShortUrlPath = u.ShortUrlPath
 		return c.JSON(http.StatusOK, res)
 	}
 
 	var u model.Url
-	u.ID = uuid.New()
-	u.LongUrl = req.LongUrl
-	u.ShortUrl = generateShortUrl(u.ID)
+	u.Uuid = uuid.New()
+	u.OrgUrl = req.OrgUrl
+	u.ShortUrlPath = generateShortUrlPath(u.Uuid)
 
 	if err := h.urlStore.CreateUrl(&u); err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.NewError(err))
 	}
 
-	res.ShortUrl = u.ShortUrl
+	res.ShortUrlPath = u.ShortUrlPath
 	return c.JSON(http.StatusOK, res)
 }
 
-func generateShortUrl(uuid uuid.UUID) string {
+func generateShortUrlPath(uuid uuid.UUID) string {
 	return utils.EncodeBase62(uuid)
 }

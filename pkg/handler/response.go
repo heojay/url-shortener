@@ -1,9 +1,9 @@
 package handler
 
-type getLongUrlResponse struct {
-	LongUrl string `json:"longUrl"`
+type getOrgUrlResponse struct {
+	OrgUrl string `json:"orgUrl"`
 }
 
 type shortenUrlResponse struct {
-	ShortUrl string `json:"shortUrl"`
+	ShortUrlPath string `json:"shortUrlPath"`
 }

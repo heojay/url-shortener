@@ -15,9 +15,9 @@ func NewUrlStore(db *gorm.DB) *UrlStore {
 	}
 }
 
-func (us *UrlStore) GetByShortUrl(url string) (*model.Url, error) {
+func (us *UrlStore) GetByShortUrlPath(url string) (*model.Url, error) {
 	var m model.Url
-	if err := us.db.Where(&model.Url{ShortUrl: url}).First(&m).Error; err != nil {
+	if err := us.db.Where(&model.Url{ShortUrlPath: url}).First(&m).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, nil
 		}
@@ -26,9 +26,9 @@ func (us *UrlStore) GetByShortUrl(url string) (*model.Url, error) {
 	return &m, nil
 }
 
-func (us *UrlStore) GetByLongUrl(url string) (*model.Url, error) {
+func (us *UrlStore) GetByOrgUrl(url string) (*model.Url, error) {
 	var m model.Url
-	if err := us.db.Where(&model.Url{LongUrl: url}).First(&m).Error; err != nil {
+	if err := us.db.Where(&model.Url{OrgUrl: url}).First(&m).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, nil
 		}

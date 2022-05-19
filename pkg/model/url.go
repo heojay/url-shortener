@@ -2,11 +2,12 @@ package model
 
 import (
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Url struct {
-	ID         uuid.UUID
-	ShortUrl   string `gorm:"not null"`
-	LongUrl    string `gorm:"not null"`
-	ClickCount int    `gorm:"default:0"`
+	gorm.Model
+	Uuid         uuid.UUID
+	OrgUrl       string `gorm:"not null"`
+	ShortUrlPath string `gorm:"not null"`
 }

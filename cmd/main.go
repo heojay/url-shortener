@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/heojay/url-shortener/pkg/config"
 	"github.com/heojay/url-shortener/pkg/db"
 	"github.com/heojay/url-shortener/pkg/handler"
 	"github.com/heojay/url-shortener/pkg/model"
@@ -14,11 +15,15 @@ func main() {
 
 	v1 := r.Group("/api")
 
-	d, err := db.New()
+	cfg, err := config.New()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	d, err := db.New(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
 	err = d.AutoMigrate(&model.Url{})
 	if err != nil {
 		log.Fatal(err)
@@ -28,5 +33,5 @@ func main() {
 	h := handler.New(us)
 	h.Register(v1)
 
-	r.Logger.Fatal(r.Start(":8000"))
+	r.Logger.Fatal(r.Start(":8080"))
 }

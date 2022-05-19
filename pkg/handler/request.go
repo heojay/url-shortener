@@ -1,9 +1,9 @@
 package handler
 
-type getLongUrlRequest struct {
-	ShortUrl string `param:"shortUrl" validate:"required"`
+type getOrgUrlRequest struct {
+	ShortUrlPath string `param:"shortUrlPath" validate:"required"`
 }
 
 type shortenUrlRequest struct {
-	LongUrl string `json:"longUrl" validate:"required"`
+	OrgUrl string `json:"orgUrl" validate:"required"`
 }
